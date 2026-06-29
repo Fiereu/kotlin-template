@@ -21,8 +21,8 @@ Copier will prompt for:
 | `kotlin_version`    | Kotlin version pinned in the version catalog                   |
 | `java_version`      | Java toolchain version Kotlin targets                          |
 | `kotlin_convention` | Add a `kotlin-conventions` plugin in `buildSrc`                |
-| `kotest_convention` | Add a `test-conventions` plugin in `buildSrc` wiring up Kotest |
-| `kotest_version`    | Kotest version pinned in the version catalog (asked if enabled)|
+| `test_framework`    | Test framework for the `test-conventions` plugin (`none` / `kotest`) |
+| `kotest_version`    | Kotest version pinned in the catalog (asked when Kotest chosen)|
 | `spotless_convention` | Add a `spotless-conventions` plugin (ktlint formatting)      |
 | `spotless_version`  | Spotless plugin version pinned in the catalog (asked if enabled)|
 | `sonarlint_convention`| Add a `sonarlint-conventions` plugin (remal SonarLint)      |
@@ -36,9 +36,12 @@ under `buildSrc/`:
 - **`kotlin-conventions`** applies the Kotlin JVM plugin, repositories and the
   JVM toolchain. The app's `build.gradle.kts` applies it instead of configuring
   Kotlin inline.
-- **`test-conventions`** builds on `kotlin-conventions` and wires up
-  [Kotest](https://kotest.io/) (JUnit Platform + Kotest dependencies from the
-  catalog), plus a sample `ExampleTest`.
+- **`test-conventions`** builds on `kotlin-conventions` and wires up the test
+  framework chosen via `test_framework` (currently
+  [Kotest](https://kotest.io/): JUnit Platform + Kotest dependencies from the
+  catalog), plus a sample `ExampleTest`. Pick `none` to skip it. The choice is
+  designed to be extended. Adding a framework is a new entry under `choices:`
+  in `copier.yml` plus a branch in the convention and sample test.
 - **`spotless-conventions`** applies [Spotless](https://github.com/diffplug/spotless)
   with ktlint for `*.kt` and `*.gradle.kts` files (`spotlessCheck` / `spotlessApply`).
 - **`sonarlint-conventions`** applies the
@@ -46,8 +49,8 @@ under `buildSrc/`:
   which hooks SonarLint analysis into `check`. It disables `kotlin:S106` so the
   sample app's `println` doesn't fail the build. Drop that once you add logging.
 
-The Kotest convention builds on the Kotlin one, so enabling it requires
-`kotlin_convention`. The Spotless and SonarLint conventions are independent and
+The test convention builds on the Kotlin one, so choosing a framework other than
+`none` requires `kotlin_convention`. The Spotless and SonarLint conventions are independent and
 work whether Kotlin is configured via its convention or inline. If every toggle
 is off, Kotlin is configured inline in `build.gradle.kts` and no `buildSrc/` is
 generated.

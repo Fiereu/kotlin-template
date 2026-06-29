@@ -1,5 +1,5 @@
 package {{ project_group }}
-
+{% if test_framework == 'kotest' %}
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -9,3 +9,4 @@ class ExampleTest :
             (2 + 2) shouldBe 4
         }
     })
+{%- endif %}

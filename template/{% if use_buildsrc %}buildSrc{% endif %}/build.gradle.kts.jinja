@@ -8,8 +8,8 @@ repositories {
 }
 
 dependencies {
-{%- if kotlin_convention or kotest_convention %}
-    // Lets the Kotlin/Kotest conventions apply the Kotlin Gradle plugin.
+{%- if kotlin_convention or has_tests %}
+    // Lets the Kotlin/test conventions apply the Kotlin Gradle plugin.
     implementation(libs.kotlin.gradle.plugin)
 {%- endif %}
 {%- if spotless_convention %}

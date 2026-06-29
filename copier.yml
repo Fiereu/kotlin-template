@@ -43,20 +43,23 @@ kotlin_convention:
   help: Add a Kotlin convention plugin in buildSrc (shared Kotlin/toolchain config)?
   default: true
 
-kotest_convention:
-  type: bool
-  help: Add a test convention plugin in buildSrc that wires up Kotest?
-  default: true
+test_framework:
+  type: str
+  help: Which test framework should the test convention set up?
+  choices:
+    "None (no test convention)": none
+    Kotest: kotest
+  default: kotest
   validator: >-
-    {% if kotest_convention and not kotlin_convention %}
-    The Kotest test convention builds on the Kotlin convention. Enable the Kotlin convention too.
+    {% if test_framework != "none" and not kotlin_convention %}
+    The test convention builds on the Kotlin convention. Enable the Kotlin convention too.
     {% endif %}
 
 kotest_version:
   type: str
   help: Which Kotest version should the version catalog pin?
   default: "5.9.1"
-  when: "{{ kotest_convention }}"
+  when: "{{ test_framework == 'kotest' }}"
 
 spotless_convention:
   type: bool
@@ -84,10 +87,15 @@ sonarlint_version:
 # Computed values (not asked)
 # ----------------------------------------------------------------------------
 
+has_tests:
+  type: bool
+  when: false
+  default: "{{ test_framework != 'none' }}"
+
 use_buildsrc:
   type: bool
   when: false
-  default: "{{ kotlin_convention or kotest_convention or spotless_convention or sonarlint_convention }}"
+  default: "{{ kotlin_convention or has_tests or spotless_convention or sonarlint_convention }}"
 
 project_slug:
   type: str

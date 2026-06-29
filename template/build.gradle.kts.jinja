@@ -4,7 +4,7 @@ plugins {
 {%- else %}
     alias(libs.plugins.kotlin.jvm)
 {%- endif %}
-{%- if kotest_convention %}
+{%- if has_tests %}
     id("test-conventions")
 {%- endif %}
 {%- if spotless_convention %}

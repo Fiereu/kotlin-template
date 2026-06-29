@@ -1,16 +1,22 @@
+{% if test_framework == 'kotest' -%}
 import org.gradle.accessors.dm.LibrariesForLibs
 
+{% endif -%}
 plugins {
     id("kotlin-conventions")
     // Re-declared here so the type-safe `testImplementation` accessor is generated.
     kotlin("jvm")
 }
 
+{% if test_framework == 'kotest' -%}
 val libs = the<LibrariesForLibs>()
 
+{% endif -%}
 dependencies {
+{%- if test_framework == 'kotest' %}
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotest.assertions.core)
+{%- endif %}
 }
 
 tasks.test {
