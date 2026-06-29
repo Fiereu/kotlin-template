@@ -129,6 +129,11 @@ author_name:
   default: ""
   when: "{{ license != 'none' }}"
 
+github_actions:
+  type: bool
+  help: Generate GitHub Actions workflows for testing and formatting?
+  default: true
+
 # ----------------------------------------------------------------------------
 # Computed values (not asked)
 # ----------------------------------------------------------------------------
@@ -142,6 +147,31 @@ use_buildsrc:
   type: bool
   when: false
   default: "{{ kotlin_convention or has_tests or spotless_convention or sonarlint_convention }}"
+
+gen_copilot:
+  type: bool
+  when: false
+  default: "{{ agent_instructions and 'copilot' in agent_links }}"
+
+gen_test_workflow:
+  type: bool
+  when: false
+  default: "{{ github_actions and has_tests }}"
+
+gen_format_workflow:
+  type: bool
+  when: false
+  default: "{{ github_actions and spotless_convention }}"
+
+gen_workflows:
+  type: bool
+  when: false
+  default: "{{ gen_test_workflow or gen_format_workflow }}"
+
+use_github_dir:
+  type: bool
+  when: false
+  default: "{{ gen_copilot or gen_workflows }}"
 
 project_slug:
   type: str

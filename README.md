@@ -34,6 +34,7 @@ Copier will prompt for:
 | `agent_links`       | Which agent tools get a file linking back to `AGENTS.md`       |
 | `license`           | License to generate (`none`, `MIT`, `Apache-2.0`, `BSD-3-Clause`, `GPL-3.0`, `AGPL-3.0`, `MPL-2.0`) |
 | `author_name`       | Copyright holder (blank uses your git `user.name`)             |
+| `github_actions`    | Generate GitHub Actions workflows for testing and formatting   |
 
 ## Convention plugins
 
@@ -104,6 +105,16 @@ generation task fetches that license from the
 `user.name` when left blank). This needs `--trust`, Python 3, and network
 access. Choose `none` to skip it.
 
+## Continuous integration
+
+With `github_actions` enabled, the project gets GitHub Actions workflows under
+`.github/workflows/`. Each runs on pushes to `main`/`master` and on pull
+requests, sets up the chosen JDK with Temurin, and runs through the Gradle
+wrapper with `gradle/actions/setup-gradle` caching:
+
+- **`test.yml`** runs `./gradlew test` (generated when a test framework is chosen).
+- **`format.yml`** runs `./gradlew spotlessCheck` (generated when Spotless is enabled).
+
 ## What you get
 
 ```
@@ -124,7 +135,11 @@ access. Choose `none` to skip it.
 ├── AGENTS.md                     # only with agent_instructions
 ├── CLAUDE.md -> AGENTS.md        # symlinks, per agent_links
 ├── GEMINI.md -> AGENTS.md
-├── .github/copilot-instructions.md -> ../AGENTS.md
+├── .github/
+│   ├── copilot-instructions.md -> ../AGENTS.md   # per agent_links
+│   └── workflows/                # only with github_actions
+│       ├── test.yml
+│       └── format.yml
 ├── src/main/kotlin/<group>/Main.kt
 └── src/test/kotlin/<group>/ExampleTest.kt   # only with Kotest
 ```
