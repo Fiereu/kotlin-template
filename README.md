@@ -27,6 +27,8 @@ Copier will prompt for:
 | `spotless_version`  | Spotless plugin version pinned in the catalog (asked if enabled)|
 | `sonarlint_convention`| Add a `sonarlint-conventions` plugin (remal SonarLint)      |
 | `sonarlint_version` | SonarLint plugin version pinned in the catalog (asked if enabled)|
+| `agent_instructions`| Generate an `AGENTS.md` for AI coding agents                   |
+| `agent_links`       | Which agent tools get a file linking back to `AGENTS.md`       |
 
 ## Convention plugins
 
@@ -54,6 +56,23 @@ The test convention builds on the Kotlin one, so choosing a framework other than
 work whether Kotlin is configured via its convention or inline. If every toggle
 is off, Kotlin is configured inline in `build.gradle.kts` and no `buildSrc/` is
 generated.
+
+## AI agent instructions
+
+With `agent_instructions` enabled, the project gets an **`AGENTS.md`** containing
+the actual build/test/format/check instructions (tailored to the conventions you
+picked). It's the single source of truth.
+
+Each tool selected in `agent_links` gets a **symlink** back to it, so there's no
+duplicated content to keep in sync:
+
+- Claude Code -> `CLAUDE.md`
+- GitHub Copilot -> `.github/copilot-instructions.md`
+- Gemini CLI -> `GEMINI.md`
+
+Adding another tool later is one entry under `agent_links` `choices:` plus a
+symlink in the template. (Symlink reproduction relies on `_preserve_symlinks` in
+`copier.yml`. Note that symlinks need a Git/OS that supports them.)
 
 After generation:
 
@@ -88,6 +107,10 @@ copier update
 │       ├── test-conventions.gradle.kts
 │       ├── spotless-conventions.gradle.kts
 │       └── sonarlint-conventions.gradle.kts
+├── AGENTS.md                     # only with agent_instructions
+├── CLAUDE.md -> AGENTS.md        # symlinks, per agent_links
+├── GEMINI.md -> AGENTS.md
+├── .github/copilot-instructions.md -> ../AGENTS.md
 ├── src/main/kotlin/<group>/Main.kt
 └── src/test/kotlin/<group>/ExampleTest.kt   # only with Kotest
 ```

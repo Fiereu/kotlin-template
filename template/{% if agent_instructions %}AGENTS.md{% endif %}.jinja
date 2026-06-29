@@ -1,0 +1,57 @@
+# {{ project_name }}
+
+Guidance for AI coding agents working in this repository. This file is the single
+source of truth. Tool-specific files (e.g. `CLAUDE.md`) link back to it.
+
+## Project layout
+
+- Kotlin/JVM project built with Gradle (Kotlin DSL).
+- Dependencies and plugin versions are declared in the version catalog at
+  `gradle/libs.versions.toml`. Add new ones there, not inline.
+- Application entry point: `src/main/kotlin/{{ package_path }}/Main.kt`.
+{%- if use_buildsrc %}
+- Shared build logic lives in `buildSrc/` as precompiled convention plugins.
+{%- endif %}
+
+## Common commands
+
+Always use the Gradle wrapper (`./gradlew`):
+
+- Build: `./gradlew build`
+- Run the app: `./gradlew run`
+{%- if has_tests %}
+- Run tests: `./gradlew test`
+{%- endif %}
+{%- if spotless_convention %}
+- Check formatting: `./gradlew spotlessCheck`
+- Auto-format: `./gradlew spotlessApply`
+{%- endif %}
+- Run all checks: `./gradlew check`
+
+## Conventions
+
+{%- if kotlin_convention %}
+- Kotlin and the Java {{ java_version }} toolchain are configured by the
+  `kotlin-conventions` plugin in `buildSrc/`.
+{%- else %}
+- Kotlin and the Java {{ java_version }} toolchain are configured inline in
+  `build.gradle.kts`.
+{%- endif %}
+{%- if has_tests %}
+- Tests use {{ test_framework }} (wired up by the `test-conventions` plugin).
+  Put tests under `src/test/kotlin`.
+{%- endif %}
+{%- if spotless_convention %}
+- Code is formatted with Spotless/ktlint. Run `./gradlew spotlessApply` before
+  committing.
+{%- endif %}
+{%- if sonarlint_convention %}
+- SonarLint static analysis runs as part of `./gradlew check`.
+{%- endif %}
+
+## Before committing
+
+- Make sure `./gradlew check` passes.
+{%- if spotless_convention %}
+- Make sure the code is formatted (`./gradlew spotlessApply`).
+{%- endif %}

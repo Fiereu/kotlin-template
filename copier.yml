@@ -1,5 +1,6 @@
 _min_copier_version: "9.0.0"
 _subdirectory: template
+_preserve_symlinks: true
 
 # ----------------------------------------------------------------------------
 # Questions
@@ -82,6 +83,25 @@ sonarlint_version:
   help: Which remal SonarLint plugin version should the version catalog pin?
   default: "7.1.1"
   when: "{{ sonarlint_convention }}"
+
+agent_instructions:
+  type: bool
+  help: Generate an AGENTS.md with build/test instructions for AI coding agents?
+  default: true
+
+agent_links:
+  type: str
+  multiselect: true
+  help: Which agent tools should get a file linking back to AGENTS.md?
+  choices:
+    Claude Code (CLAUDE.md): claude
+    GitHub Copilot (.github/copilot-instructions.md): copilot
+    Gemini CLI (GEMINI.md): gemini
+  default:
+    - claude
+    - copilot
+    - gemini
+  when: "{{ agent_instructions }}"
 
 # ----------------------------------------------------------------------------
 # Computed values (not asked)
