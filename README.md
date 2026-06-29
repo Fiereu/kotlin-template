@@ -8,8 +8,11 @@ and a pinned Gradle wrapper.
 ## Usage
 
 ```sh
-copier copy gh:fiereu/kotlin-template path/to/new-project
+copier copy --trust gh:fiereu/kotlin-template path/to/new-project
 ```
+
+`--trust` is required because choosing a license runs a generation task (see
+[License](#license) below).
 
 Copier will prompt for:
 
@@ -29,6 +32,8 @@ Copier will prompt for:
 | `sonarlint_version` | SonarLint plugin version pinned in the catalog (asked if enabled)|
 | `agent_instructions`| Generate an `AGENTS.md` for AI coding agents                   |
 | `agent_links`       | Which agent tools get a file linking back to `AGENTS.md`       |
+| `license`           | License to generate (`none`, `MIT`, `Apache-2.0`, `BSD-3-Clause`, `GPL-3.0`, `AGPL-3.0`, `MPL-2.0`) |
+| `author_name`       | Copyright holder (blank uses your git `user.name`)             |
 
 ## Convention plugins
 
@@ -89,6 +94,15 @@ template changes with:
 ```sh
 copier update
 ```
+
+## License
+
+This template does not vendor any license texts. When you pick a `license`, a
+generation task fetches that license from the
+[GitHub Licenses API](https://docs.github.com/en/rest/licenses) and writes it to
+`LICENSE`, filling in the current year and `author_name` (or your git
+`user.name` when left blank). This needs `--trust`, Python 3, and network
+access. Choose `none` to skip it.
 
 ## What you get
 

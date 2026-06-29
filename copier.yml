@@ -2,6 +2,13 @@ _min_copier_version: "9.0.0"
 _subdirectory: template
 _preserve_symlinks: true
 
+# License texts are deliberately not vendored here. When a license is chosen,
+# this task fetches it from the GitHub Licenses API and writes the LICENSE file.
+_tasks:
+  - >-
+    {% if license != 'none' %}python3 "{{ _copier_conf.src_path }}/scripts/render_license.py"
+    --spdx "{{ license }}" --author "{{ author_name }}" --out LICENSE{% else %}true{% endif %}
+
 # ----------------------------------------------------------------------------
 # Questions
 # ----------------------------------------------------------------------------
@@ -102,6 +109,25 @@ agent_links:
     - copilot
     - gemini
   when: "{{ agent_instructions }}"
+
+license:
+  type: str
+  help: Which license should the project use? (fetched from the GitHub Licenses API at generation time)
+  choices:
+    None: none
+    MIT: MIT
+    Apache-2.0: Apache-2.0
+    BSD-3-Clause: BSD-3-Clause
+    GPL-3.0: GPL-3.0
+    AGPL-3.0: AGPL-3.0
+    MPL-2.0: MPL-2.0
+  default: MIT
+
+author_name:
+  type: str
+  help: Copyright holder for the license (blank uses your git user.name)
+  default: ""
+  when: "{{ license != 'none' }}"
 
 # ----------------------------------------------------------------------------
 # Computed values (not asked)
