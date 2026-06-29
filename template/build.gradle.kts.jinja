@@ -7,6 +7,12 @@ plugins {
 {%- if kotest_convention %}
     id("test-conventions")
 {%- endif %}
+{%- if spotless_convention %}
+    id("spotless-conventions")
+{%- endif %}
+{%- if sonarlint_convention %}
+    id("sonarlint-conventions")
+{%- endif %}
     application
 }
 

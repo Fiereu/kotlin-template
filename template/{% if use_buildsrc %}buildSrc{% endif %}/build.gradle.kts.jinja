@@ -8,8 +8,16 @@ repositories {
 }
 
 dependencies {
-    // Lets the convention plugins apply the Kotlin Gradle plugin.
+{%- if kotlin_convention or kotest_convention %}
+    // Lets the Kotlin/Kotest conventions apply the Kotlin Gradle plugin.
     implementation(libs.kotlin.gradle.plugin)
+{%- endif %}
+{%- if spotless_convention %}
+    implementation(libs.spotless.gradle.plugin)
+{%- endif %}
+{%- if sonarlint_convention %}
+    implementation(libs.sonarlint.gradle.plugin)
+{%- endif %}
     // Exposes the generated `libs` catalog accessors to the precompiled
     // convention plugins under src/main/kotlin.
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))

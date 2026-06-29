@@ -1,0 +1,11 @@
+plugins {
+    id("name.remal.sonarlint")
+}
+
+sonarLint {
+    rules {
+        // println in the generated sample app trips this rule. Drop the
+        // disable below once you swap in real logging.
+        disable("kotlin:S106")
+    }
+}

@@ -3,18 +3,32 @@ kotlin = "{{ kotlin_version }}"
 {%- if kotest_convention %}
 kotest = "{{ kotest_version }}"
 {%- endif %}
+{%- if spotless_convention %}
+spotless = "{{ spotless_version }}"
+{%- endif %}
+{%- if sonarlint_convention %}
+sonarlint = "{{ sonarlint_version }}"
+{%- endif %}
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 [libraries]
-{%- if use_buildsrc %}
+{%- if kotlin_convention or kotest_convention %}
 # Used by buildSrc so convention plugins can apply the Kotlin Gradle plugin.
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 {%- endif %}
 {%- if kotest_convention %}
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+{%- endif %}
+{%- if spotless_convention %}
+# Plugin marker, used by buildSrc so the convention can apply Spotless.
+spotless-gradle-plugin = { module = "com.diffplug.spotless:com.diffplug.spotless.gradle.plugin", version.ref = "spotless" }
+{%- endif %}
+{%- if sonarlint_convention %}
+# Plugin marker, used by buildSrc so the convention can apply SonarLint.
+sonarlint-gradle-plugin = { module = "name.remal.sonarlint:name.remal.sonarlint.gradle.plugin", version.ref = "sonarlint" }
 {%- endif %}
 {%- if not use_buildsrc %}
 # Declare your dependencies here, e.g.:

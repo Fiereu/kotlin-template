@@ -58,6 +58,28 @@ kotest_version:
   default: "5.9.1"
   when: "{{ kotest_convention }}"
 
+spotless_convention:
+  type: bool
+  help: Add a Spotless convention plugin in buildSrc (ktlint formatting)?
+  default: true
+
+spotless_version:
+  type: str
+  help: Which Spotless plugin version should the version catalog pin?
+  default: "8.7.0"
+  when: "{{ spotless_convention }}"
+
+sonarlint_convention:
+  type: bool
+  help: Add a SonarLint convention plugin in buildSrc (remal name.remal.sonarlint)?
+  default: true
+
+sonarlint_version:
+  type: str
+  help: Which remal SonarLint plugin version should the version catalog pin?
+  default: "7.1.1"
+  when: "{{ sonarlint_convention }}"
+
 # ----------------------------------------------------------------------------
 # Computed values (not asked)
 # ----------------------------------------------------------------------------
@@ -65,7 +87,7 @@ kotest_version:
 use_buildsrc:
   type: bool
   when: false
-  default: "{{ kotlin_convention or kotest_convention }}"
+  default: "{{ kotlin_convention or kotest_convention or spotless_convention or sonarlint_convention }}"
 
 project_slug:
   type: str
