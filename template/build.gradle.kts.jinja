@@ -1,22 +1,29 @@
 plugins {
+{%- if kotlin_convention %}
+    id("kotlin-conventions")
+{%- else %}
     alias(libs.plugins.kotlin.jvm)
+{%- endif %}
+{%- if kotest_convention %}
+    id("test-conventions")
+{%- endif %}
     application
 }
 
 group = "{{ project_group }}"
 version = "0.1.0"
-
+{% if not kotlin_convention %}
 repositories {
     mavenCentral()
 }
-
+{% endif %}
 dependencies {
 }
-
+{% if not kotlin_convention %}
 kotlin {
     jvmToolchain({{ java_version }})
 }
-
+{% endif %}
 application {
     mainClass = "{{ project_group }}.MainKt"
 }

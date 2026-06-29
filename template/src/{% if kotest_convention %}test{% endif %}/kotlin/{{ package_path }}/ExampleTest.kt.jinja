@@ -1,0 +1,10 @@
+package {{ project_group }}
+
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+
+class ExampleTest : StringSpec({
+    "two plus two is four" {
+        (2 + 2) shouldBe 4
+    }
+})

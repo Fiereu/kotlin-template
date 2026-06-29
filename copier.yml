@@ -38,9 +38,34 @@ java_version:
   help: Which Java toolchain version should Kotlin target?
   default: 21
 
+kotlin_convention:
+  type: bool
+  help: Add a Kotlin convention plugin in buildSrc (shared Kotlin/toolchain config)?
+  default: true
+
+kotest_convention:
+  type: bool
+  help: Add a test convention plugin in buildSrc that wires up Kotest?
+  default: true
+  validator: >-
+    {% if kotest_convention and not kotlin_convention %}
+    The Kotest test convention builds on the Kotlin convention. Enable the Kotlin convention too.
+    {% endif %}
+
+kotest_version:
+  type: str
+  help: Which Kotest version should the version catalog pin?
+  default: "5.9.1"
+  when: "{{ kotest_convention }}"
+
 # ----------------------------------------------------------------------------
 # Computed values (not asked)
 # ----------------------------------------------------------------------------
+
+use_buildsrc:
+  type: bool
+  when: false
+  default: "{{ kotlin_convention or kotest_convention }}"
 
 project_slug:
   type: str
