@@ -108,12 +108,16 @@ access. Choose `none` to skip it.
 ## Continuous integration
 
 With `github_actions` enabled, the project gets GitHub Actions workflows under
-`.github/workflows/`. Each runs on pushes to `main`/`master` and on pull
-requests, sets up the chosen JDK with Temurin, and runs through the Gradle
-wrapper with `gradle/actions/setup-gradle` caching:
+`.github/workflows/`. Both set up the chosen JDK with Temurin and run through the
+Gradle wrapper with `gradle/actions/setup-gradle` caching:
 
-- **`test.yml`** runs `./gradlew test` (generated when a test framework is chosen).
-- **`format.yml`** runs `./gradlew spotlessCheck` (generated when Spotless is enabled).
+- **`test.yml`** runs `./gradlew test` on pushes to `main`/`master` and on pull
+  requests (generated when a test framework is chosen).
+- **`format.yml`** runs `./gradlew spotlessApply` on pushes to `main`/`master`
+  and on open pull request branches, then commits the result as
+  `chore: apply spotless formatting` when there are changes (generated when
+  Spotless is enabled). It needs `contents: write`. Pushes from forked-repo pull
+  requests cannot be committed back, so the commit step is skipped there.
 
 ## What you get
 
