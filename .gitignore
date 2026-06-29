@@ -1,0 +1,7 @@
+# Python / Copier tooling cruft
+__pycache__/
+*.py[cod]
+.venv/
+
+# OS
+.DS_Store

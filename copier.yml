@@ -1,0 +1,53 @@
+_min_copier_version: "9.0.0"
+_subdirectory: template
+
+# ----------------------------------------------------------------------------
+# Questions
+# ----------------------------------------------------------------------------
+
+project_name:
+  type: str
+  help: Human-readable name of the project
+  default: My Kotlin App
+
+project_group:
+  type: str
+  help: Maven group / base package (e.g. de.fiereu.myapp)
+  default: com.example.app
+  validator: >-
+    {% if not (project_group | regex_search('^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)*$')) %}
+    The group must be a valid lowercase, dot-separated package (e.g. de.fiereu.myapp).
+    {% endif %}
+
+gradle_version:
+  type: str
+  help: Which Gradle version should the wrapper use?
+  default: "8.14.3"
+  validator: >-
+    {% if not (gradle_version | regex_search('^\d+\.\d+(\.\d+)?$')) %}
+    Enter a Gradle version like 8.14.3 or 9.0.
+    {% endif %}
+
+kotlin_version:
+  type: str
+  help: Which Kotlin version should the version catalog pin?
+  default: "2.2.0"
+
+java_version:
+  type: int
+  help: Which Java toolchain version should Kotlin target?
+  default: 21
+
+# ----------------------------------------------------------------------------
+# Computed values (not asked)
+# ----------------------------------------------------------------------------
+
+project_slug:
+  type: str
+  when: false
+  default: "{{ project_name | lower | replace(' ', '-') | replace('_', '-') }}"
+
+package_path:
+  type: str
+  when: false
+  default: "{{ project_group | replace('.', '/') }}"

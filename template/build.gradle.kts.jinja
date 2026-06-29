@@ -1,0 +1,22 @@
+plugins {
+    alias(libs.plugins.kotlin.jvm)
+    application
+}
+
+group = "{{ project_group }}"
+version = "0.1.0"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
+
+kotlin {
+    jvmToolchain({{ java_version }})
+}
+
+application {
+    mainClass = "{{ project_group }}.MainKt"
+}
