@@ -30,21 +30,21 @@ project_group:
 gradle_version:
   type: str
   help: Which Gradle version should the wrapper use?
-  default: "8.14.3"
+  default: "9.6.1"
   validator: >-
     {% if not (gradle_version | regex_search('^\d+\.\d+(\.\d+)?$')) %}
-    Enter a Gradle version like 8.14.3 or 9.0.
+    Enter a Gradle version like 9.6.1 or 9.0.
     {% endif %}
 
 kotlin_version:
   type: str
   help: Which Kotlin version should the version catalog pin?
-  default: "2.2.0"
+  default: "2.4.0"
 
 java_version:
   type: int
   help: Which Java toolchain version should Kotlin target?
-  default: 21
+  default: 25
 
 kotlin_convention:
   type: bool
@@ -66,7 +66,7 @@ test_framework:
 kotest_version:
   type: str
   help: Which Kotest version should the version catalog pin?
-  default: "5.9.1"
+  default: "6.1.4"
   when: "{{ test_framework == 'kotest' }}"
 
 spotless_convention:
