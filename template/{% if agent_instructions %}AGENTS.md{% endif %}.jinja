@@ -8,7 +8,13 @@ source of truth. Tool-specific files (e.g. `CLAUDE.md`) link back to it.
 - Kotlin/JVM project built with Gradle (Kotlin DSL).
 - Dependencies and plugin versions are declared in the version catalog at
   `gradle/libs.versions.toml`. Add new ones there, not inline.
+{%- if is_multi %}
+- Multi-module build. The application module is `{{ module_name }}`. Add further
+  modules as sibling directories and `include(...)` them in `settings.gradle.kts`.
+- Application entry point: `{{ module_name }}/src/main/kotlin/{{ package_path }}/Main.kt`.
+{%- else %}
 - Application entry point: `src/main/kotlin/{{ package_path }}/Main.kt`.
+{%- endif %}
 {%- if use_buildsrc %}
 - Shared build logic lives in `buildSrc/` as precompiled convention plugins.
 {%- endif %}

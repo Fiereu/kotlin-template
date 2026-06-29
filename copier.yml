@@ -27,6 +27,24 @@ project_group:
     The group must be a valid lowercase, dot-separated package (e.g. de.fiereu.myapp).
     {% endif %}
 
+project_layout:
+  type: str
+  help: Single-module or multi-module project?
+  choices:
+    Single module: single
+    Multi module: multi
+  default: single
+
+module_name:
+  type: str
+  help: Name of the default module
+  default: core
+  when: "{{ project_layout == 'multi' }}"
+  validator: >-
+    {% if project_layout == 'multi' and not (module_name | regex_search('^[a-z][a-z0-9-]*$')) %}
+    The module name must be lowercase kebab-case (e.g. core).
+    {% endif %}
+
 gradle_version:
   type: str
   help: Which Gradle version should the wrapper use?
@@ -137,6 +155,18 @@ github_actions:
 # ----------------------------------------------------------------------------
 # Computed values (not asked)
 # ----------------------------------------------------------------------------
+
+is_multi:
+  type: bool
+  when: false
+  default: "{{ project_layout == 'multi' }}"
+
+# Directory the application module lives in: "." (root) for single-module,
+# the module name for multi-module.
+module_dir:
+  type: str
+  when: false
+  default: "{{ module_name if is_multi else '.' }}"
 
 has_tests:
   type: bool

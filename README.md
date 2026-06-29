@@ -20,6 +20,8 @@ Copier will prompt for:
 | ------------------- | -------------------------------------------------------------- |
 | `project_name`      | Human-readable project name                                    |
 | `project_group`     | Maven group / base package (e.g. `de.fiereu.myapp`)            |
+| `project_layout`    | `single` module or `multi` module                              |
+| `module_name`       | Name of the default module for multi-module (asked then, default `core`) |
 | `gradle_version`    | Gradle version used by the wrapper                             |
 | `kotlin_version`    | Kotlin version pinned in the version catalog                   |
 | `java_version`      | Java toolchain version Kotlin targets                          |
@@ -35,6 +37,17 @@ Copier will prompt for:
 | `license`           | License to generate (`none`, `MIT`, `Apache-2.0`, `BSD-3-Clause`, `GPL-3.0`, `AGPL-3.0`, `MPL-2.0`) |
 | `author_name`       | Copyright holder (blank uses your git `user.name`)             |
 | `github_actions`    | Generate GitHub Actions workflows for testing and formatting   |
+
+## Project layout
+
+`project_layout` controls the module structure:
+
+- **`single`** keeps the application at the repository root (`build.gradle.kts`
+  and `src/` directly under it).
+- **`multi`** puts the application in a module subdirectory (default `core`,
+  set via `module_name`) and `include`s it from `settings.gradle.kts`. Add more
+  modules as sibling directories. Run the app with `./gradlew run`, which
+  resolves to the module's `run` task.
 
 ## Convention plugins
 
@@ -144,6 +157,10 @@ Gradle wrapper with `gradle/actions/setup-gradle` caching:
 │   └── workflows/                # only with github_actions
 │       ├── test.yml
 │       └── format.yml
-├── src/main/kotlin/<group>/Main.kt
+├── src/main/kotlin/<group>/Main.kt          # single-module layout
 └── src/test/kotlin/<group>/ExampleTest.kt   # only with Kotest
 ```
+
+In multi-module layout, `build.gradle.kts` and `src/` move under the module
+directory instead (e.g. `core/build.gradle.kts`, `core/src/main/kotlin/...`),
+and the root keeps only `settings.gradle.kts`.

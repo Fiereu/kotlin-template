@@ -3,3 +3,7 @@ plugins {
 }
 
 rootProject.name = "{{ project_slug }}"
+{%- if is_multi %}
+
+include("{{ module_name }}")
+{%- endif %}
